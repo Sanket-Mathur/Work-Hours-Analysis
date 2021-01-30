@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import date, timedelta
 
 class Management:
 
@@ -12,7 +13,9 @@ class Management:
         """Creates Table if it doesn't already exist in the database and adds the initial value to the table"""
         try:
             self.db.execute('CREATE TABLE IF NOT EXISTS DATA (DATE DATE PRIMARY KEY UNIQUE, WORK NUMERIC, WASTE NUMERIC)')
-            self.db.execute('INSERT INTO DATA VALUES (\'2021-01-01\', 10, 2)')
+            today = date.today()
+            for i in range(7, 0, -1):
+                self.db.execute('INSERT INTO DATA VALUES (\'{}\', 0, 0)'.format(str(today - i*timedelta(days=1))))
             self.db.commit()
         except sqlite3.Error as e:
             print(type(e).__name__)
