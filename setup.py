@@ -1,12 +1,11 @@
 from db import Management
 
-def main():
-    setup = Management()
-    setup.createTable()
-    setup.insertData(['2021-01-30',20,2])
-    setup.printTable()
+def setup():
+    database = Management()
+    database.createTable()
+    database.printTable()
 
     print('Created')
 
 if __name__ == '__main__':
-    main()
+    setup()

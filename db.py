@@ -10,7 +10,7 @@ class Management:
             print(type(e).__name__)
 
     def createTable(self):
-        """Creates Table if it doesn't already exist in the database and adds the initial value to the table"""
+        """Creates Table if it doesn't already exist in the database and adds the values of past week to the table initializing it to 0"""
         try:
             self.db.execute('CREATE TABLE IF NOT EXISTS DATA (DATE DATE PRIMARY KEY UNIQUE, WORK NUMERIC, WASTE NUMERIC)')
             today = date.today()

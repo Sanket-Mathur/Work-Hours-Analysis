@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt 
 from db import Management
 
-def main():
+def analyse():
     database = Management()
     data = database.returnData()[-7:]
 
@@ -13,4 +13,4 @@ def main():
     plt.show()
 
 if __name__ == '__main__':
-    main()
+    analyse()
