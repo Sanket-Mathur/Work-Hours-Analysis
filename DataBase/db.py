@@ -5,7 +5,7 @@ class Management:
 
     def __init__(self):
         try:
-            self.db = sqlite3.connect('./database.db')
+            self.db = sqlite3.connect('../DataBase/database.db')
         except sqlite3.Error as e:
             print(type(e).__name__)
 

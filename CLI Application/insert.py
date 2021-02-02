@@ -1,6 +1,8 @@
-from db import Management
 from datetime import datetime
 import sys
+
+sys.path.append('../DataBase/')
+from db import Management
 
 def insert():
     database = Management()

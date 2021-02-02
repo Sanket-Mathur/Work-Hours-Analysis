@@ -1,5 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt 
+import sys
+
+sys.path.append('../DataBase/')
 from db import Management
 
 def analyse():
