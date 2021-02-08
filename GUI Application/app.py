@@ -1,7 +1,19 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+import numpy as np
+import matplotlib.pyplot as plt 
 import datetime
+import sys
+
+sys.path.append('../DataBase/')
+from db import Management
 
 class Ui_workHoursAnalysis(object):
+
+    def __init__(self):
+        self.database = Management()
+        self.data = self.database.returnData()
+        self.analyse()
+
     def setupUi(self, workHoursAnalysis):
         workHoursAnalysis.setObjectName("workHoursAnalysis")
         workHoursAnalysis.resize(800, 603)
@@ -254,22 +266,43 @@ class Ui_workHoursAnalysis(object):
         self.nextWeek.setText(_translate("workHoursAnalysis", ">"))
 
     def add_clicked(self, dateVal, workVal, wasteVal):
-        print('ADD', str(dateVal.year())+'/'+str(dateVal.month())+'/'+str(dateVal.day()), workVal, wasteVal)
+        dateVal = datetime.datetime(dateVal.year(), dateVal.month(), dateVal.day())
+        self.database.insertData([str(dateVal.strftime('%Y-%m-%d')), workVal, wasteVal])
+        print('ADD', str(dateVal), workVal, wasteVal)
+        self.update()
     
     def update_clicked(self, dateVal, workVal, wasteVal):
-        print('UPDATE', str(dateVal.year())+'/'+str(dateVal.month())+'/'+str(dateVal.day()), workVal, wasteVal)
+        print('UPDATE', str(dateVal), workVal, wasteVal)
     
     def pre_clicked(self):
+        """Plot of previous week"""
         dateRange = self.weekDate.text().split(' ')
         lDate = datetime.datetime.strptime(dateRange[0], '%d/%m/%Y') - datetime.timedelta(days=7)
         rDate = datetime.datetime.strptime(dateRange[-1], '%d/%m/%Y') - datetime.timedelta(days=7)
         self.weekDate.setText(lDate.strftime('%d/%m/%Y') + ' - ' + rDate.strftime('%d/%m/%Y'))
     
     def next_clicked(self):
+        """Plot of previous week"""
         dateRange = self.weekDate.text().split(' ')
         lDate = datetime.datetime.strptime(dateRange[0], '%d/%m/%Y') + datetime.timedelta(days=7)
         rDate = datetime.datetime.strptime(dateRange[-1], '%d/%m/%Y') + datetime.timedelta(days=7)
         self.weekDate.setText(lDate.strftime('%d/%m/%Y') + ' - ' + rDate.strftime('%d/%m/%Y'))
+
+    def update(self):
+        """Update the plot with every addition or updation"""
+        self.data = self.database.returnData()
+        print(self.data)
+        self.analyse()
+        self.graph.setPixmap(QtGui.QPixmap("plot.png"))
+
+    def analyse(self):
+        """Plotting the data that was extracted from the database"""
+        data = np.array(self.data[-7:]).T
+        X = np.array(data[1:3]).astype('float64')
+
+        plt.plot(data[0], X[0], X[1])
+        plt.savefig('plot.png')
+        plt.clf()
 
 
 if __name__ == "__main__":
