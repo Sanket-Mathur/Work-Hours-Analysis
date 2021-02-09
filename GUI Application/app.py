@@ -12,6 +12,10 @@ class Ui_workHoursAnalysis(object):
     def __init__(self):
         self.database = Management()
         self.data = self.database.returnData()
+        self.data.sort(key=lambda x: datetime.datetime.strptime(x[0], '%Y-%m-%d'))
+        self.weekNos = len(self.data) // 7
+        self.weekNoCurr = self.weekNos
+        print(self.weekNos, self.weekNoCurr)
         self.analyse()
 
     def setupUi(self, workHoursAnalysis):
@@ -252,11 +256,20 @@ class Ui_workHoursAnalysis(object):
         self.preWeek.clicked.connect(self.pre_clicked)
         self.nextWeek.clicked.connect(self.next_clicked)
 
+        if self.weekNoCurr == 1:
+            self.preWeek.setEnabled(False)
+        if self.weekNoCurr == self.weekNos:
+            self.nextWeek.setEnabled(False)
+
     def retranslateUi(self, workHoursAnalysis):
         _translate = QtCore.QCoreApplication.translate
         workHoursAnalysis.setWindowTitle(_translate("workHoursAnalysis", "Work Hour Analysis"))
         
-        self.weekDate.setText(_translate("workHoursAnalysis", "01/01/2021 - 07/01/2021"))
+        d1 = self.data[-7][0]
+        d1 = d1[8:10] + '/' + d1[5:7] + '/' + d1[0:4]
+        d2 = self.data[-1][0]
+        d2 = d2[8:10] + '/' + d2[5:7] + '/' + d2[0:4]
+        self.weekDate.setText(_translate("workHoursAnalysis", d1 + " - " + d2))
         self.date.setText(_translate("workHoursAnalysis", "Date"))
         self.work.setText(_translate("workHoursAnalysis", "Work Hours"))
         self.waste.setText(_translate("workHoursAnalysis", "Waste Hours"))
@@ -276,29 +289,47 @@ class Ui_workHoursAnalysis(object):
     
     def pre_clicked(self):
         """Plot of previous week"""
+        self.weekNoCurr -= 1
         dateRange = self.weekDate.text().split(' ')
         lDate = datetime.datetime.strptime(dateRange[0], '%d/%m/%Y') - datetime.timedelta(days=7)
         rDate = datetime.datetime.strptime(dateRange[-1], '%d/%m/%Y') - datetime.timedelta(days=7)
         self.weekDate.setText(lDate.strftime('%d/%m/%Y') + ' - ' + rDate.strftime('%d/%m/%Y'))
+        if self.weekNoCurr == 1:
+            self.preWeek.setEnabled(False)
+        if self.weekNoCurr < self.weekNos:
+            self.nextWeek.setEnabled(True)
+        self.update()
     
     def next_clicked(self):
         """Plot of previous week"""
+        self.weekNoCurr += 1
         dateRange = self.weekDate.text().split(' ')
         lDate = datetime.datetime.strptime(dateRange[0], '%d/%m/%Y') + datetime.timedelta(days=7)
         rDate = datetime.datetime.strptime(dateRange[-1], '%d/%m/%Y') + datetime.timedelta(days=7)
         self.weekDate.setText(lDate.strftime('%d/%m/%Y') + ' - ' + rDate.strftime('%d/%m/%Y'))
+        if self.weekNoCurr == self.weekNos:
+            self.nextWeek.setEnabled(False)
+        if self.weekNoCurr > 1:
+            self.preWeek.setEnabled(True)
+        self.update()
 
     def update(self):
         """Update the plot with every addition or updation"""
         self.data = self.database.returnData()
+        self.data.sort(key=lambda x: datetime.datetime.strptime(x[0], '%Y-%m-%d'))
         print(self.data)
         self.analyse()
         self.graph.setPixmap(QtGui.QPixmap("plot.png"))
 
     def analyse(self):
         """Plotting the data that was extracted from the database"""
-        data = np.array(self.data[-7:]).T
+        if self.weekNos == self.weekNoCurr:
+            data = np.array(self.data[-7:]).T
+        else:
+            data = np.array(self.data[-7 * (self.weekNos - self.weekNoCurr + 1): -7 * (self.weekNos - self.weekNoCurr)]).T
         X = np.array(data[1:3]).astype('float64')
+        for i,v in enumerate(data[0]):
+            data[0][i] = v[5:]
 
         plt.plot(data[0], X[0], X[1])
         plt.savefig('plot.png')
