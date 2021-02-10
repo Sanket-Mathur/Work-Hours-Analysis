@@ -285,8 +285,13 @@ class Ui_workHoursAnalysis(object):
             self.database.insertData([str(dateVal.strftime('%Y-%m-%d')), workVal, wasteVal])
         else:
             self.show_popup_recordExist(record[0])
-        print('ADD', str(dateVal), workVal, wasteVal)
         self.update()
+        self.weekNos = len(self.data) // 7
+        self.weekNoCurr = self.weekNos
+        if self.weekNoCurr == self.weekNos:
+            self.nextWeek.setEnabled(False)
+        if self.weekNoCurr > 1:
+            self.preWeek.setEnabled(True)
     
     def update_clicked(self, dateVal, workVal, wasteVal):
         dateVal = datetime.datetime(dateVal.year(), dateVal.month(), dateVal.day())
@@ -295,7 +300,6 @@ class Ui_workHoursAnalysis(object):
             self.database.updateData([str(dateVal.strftime('%Y-%m-%d')), workVal, wasteVal])
         else:
             self.show_popup_recordDoesntExist()
-        print('UPDATE', str(dateVal), workVal, wasteVal)
         self.update()
     
     def pre_clicked(self):
@@ -328,7 +332,6 @@ class Ui_workHoursAnalysis(object):
         """Update the plot with every addition or updation"""
         self.data = self.database.returnData()
         self.data.sort(key=lambda x: datetime.datetime.strptime(x[0], '%Y-%m-%d'))
-        print(self.data)
         self.analyse()
         self.graph.setPixmap(QtGui.QPixmap("plot.png"))
 
