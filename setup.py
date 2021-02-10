@@ -1,6 +1,6 @@
 import sys
 
-sys.path.append('../DataBase/')
+sys.path.append('DataBase/')
 from db import Management
 
 def setup():

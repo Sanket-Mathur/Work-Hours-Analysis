@@ -7,6 +7,8 @@ class Management:
         try:
             self.db = sqlite3.connect('../DataBase/database.db')
         except sqlite3.Error as e:
+        	self.db = sqlite3.connect('DataBase/database.db')
+        except sqlite3.Error as e:
             print(e)
 
     def createTable(self):
