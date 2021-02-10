@@ -280,12 +280,21 @@ class Ui_workHoursAnalysis(object):
 
     def add_clicked(self, dateVal, workVal, wasteVal):
         dateVal = datetime.datetime(dateVal.year(), dateVal.month(), dateVal.day())
-        self.database.insertData([str(dateVal.strftime('%Y-%m-%d')), workVal, wasteVal])
+        if not self.database.checkData(str(dateVal.strftime('%Y-%m-%d'))):
+            self.database.insertData([str(dateVal.strftime('%Y-%m-%d')), workVal, wasteVal])
+        else:
+            print('Record already exist')
         print('ADD', str(dateVal), workVal, wasteVal)
         self.update()
     
     def update_clicked(self, dateVal, workVal, wasteVal):
+        dateVal = datetime.datetime(dateVal.year(), dateVal.month(), dateVal.day())
+        if self.database.checkData(str(dateVal.strftime('%Y-%m-%d'))):
+            self.database.updateData([str(dateVal.strftime('%Y-%m-%d')), workVal, wasteVal])
+        else:
+            print('No Record to update')
         print('UPDATE', str(dateVal), workVal, wasteVal)
+        self.update()
     
     def pre_clicked(self):
         """Plot of previous week"""
