@@ -1,4 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QMessageBox
 import numpy as np
 import matplotlib.pyplot as plt 
 import datetime
@@ -15,7 +16,6 @@ class Ui_workHoursAnalysis(object):
         self.data.sort(key=lambda x: datetime.datetime.strptime(x[0], '%Y-%m-%d'))
         self.weekNos = len(self.data) // 7
         self.weekNoCurr = self.weekNos
-        print(self.weekNos, self.weekNoCurr)
         self.analyse()
 
     def setupUi(self, workHoursAnalysis):
@@ -280,19 +280,21 @@ class Ui_workHoursAnalysis(object):
 
     def add_clicked(self, dateVal, workVal, wasteVal):
         dateVal = datetime.datetime(dateVal.year(), dateVal.month(), dateVal.day())
-        if not self.database.checkData(str(dateVal.strftime('%Y-%m-%d'))):
+        record = self.database.checkData(str(dateVal.strftime('%Y-%m-%d')))
+        if not record:
             self.database.insertData([str(dateVal.strftime('%Y-%m-%d')), workVal, wasteVal])
         else:
-            print('Record already exist')
+            self.show_popup_recordExist(record[0])
         print('ADD', str(dateVal), workVal, wasteVal)
         self.update()
     
     def update_clicked(self, dateVal, workVal, wasteVal):
         dateVal = datetime.datetime(dateVal.year(), dateVal.month(), dateVal.day())
-        if self.database.checkData(str(dateVal.strftime('%Y-%m-%d'))):
+        record = self.database.checkData(str(dateVal.strftime('%Y-%m-%d')))
+        if record:
             self.database.updateData([str(dateVal.strftime('%Y-%m-%d')), workVal, wasteVal])
         else:
-            print('No Record to update')
+            self.show_popup_recordDoesntExist()
         print('UPDATE', str(dateVal), workVal, wasteVal)
         self.update()
     
@@ -343,6 +345,26 @@ class Ui_workHoursAnalysis(object):
         plt.plot(data[0], X[0], X[1])
         plt.savefig('plot.png')
         plt.clf()
+
+    def show_popup_recordExist(self, details):
+        msg = QMessageBox()
+        msg.setWindowTitle('Error')
+        msg.setText('The record already exists.')
+        msg.setIcon(QMessageBox.Warning)
+        msg.setInformativeText('Only a single entry can be added per date.')
+
+        msg.setDetailedText('The existing values are\nWork Hours:\t{}\nWasted Hours:\t{}\nUse the UPDATE button if you want to update the record.\nDate: {}'.format(details[1], details[2], details[0]))
+
+        x = msg.exec_()
+
+    def show_popup_recordDoesntExist(self):
+        msg = QMessageBox()
+        msg.setWindowTitle('Error')
+        msg.setText('The record does not exists.')
+        msg.setIcon(QMessageBox.Warning)
+        msg.setInformativeText('Use the ADD button to add the record.')
+
+        x = msg.exec_()
 
 
 if __name__ == "__main__":
