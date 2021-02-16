@@ -187,6 +187,31 @@ class Ui_workHoursAnalysis(object):
         self.weekDate.setAlignment(QtCore.Qt.AlignCenter)
         self.weekDate.setObjectName("weekDate")
 
+        self.avgWorkedLabel = QtWidgets.QLabel(self.centralwidget)
+        self.avgWorkedLabel.setGeometry(QtCore.QRect(590, 410, 381, 31))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.avgWorkedLabel.setFont(font)
+        self.avgWorkedLabel.setObjectName("avgWorkedLabel")
+        self.avgWastedLabel = QtWidgets.QLabel(self.centralwidget)
+        self.avgWastedLabel.setGeometry(QtCore.QRect(590, 430, 381, 31))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.avgWastedLabel.setFont(font)
+        self.avgWastedLabel.setObjectName("avgWastedLabel")
+        self.sumWorkedLabel = QtWidgets.QLabel(self.centralwidget)
+        self.sumWorkedLabel.setGeometry(QtCore.QRect(590, 450, 381, 31))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.sumWorkedLabel.setFont(font)
+        self.sumWorkedLabel.setObjectName("sumWorkedLabel")
+        self.sumWastedLabel = QtWidgets.QLabel(self.centralwidget)
+        self.sumWastedLabel.setGeometry(QtCore.QRect(590, 470, 381, 31))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.sumWastedLabel.setFont(font)
+        self.sumWastedLabel.setObjectName("sumWastedLabel")
+
         self.frame = QtWidgets.QFrame(self.centralwidget)
         self.frame.setGeometry(QtCore.QRect(10, 10, 781, 111))
         font = QtGui.QFont()
@@ -270,6 +295,14 @@ class Ui_workHoursAnalysis(object):
         d2 = self.data[-1][0]
         d2 = d2[8:10] + '/' + d2[5:7] + '/' + d2[0:4]
         self.weekDate.setText(_translate("workHoursAnalysis", d1 + " - " + d2))
+        self.avgWorkedLabel.setText(_translate("workHoursAnalysis", " "*10 + "Avg Work:\t{}".format(self.avgWorked)))
+        self.avgWorkedLabel.adjustSize()
+        self.avgWastedLabel.setText(_translate("workHoursAnalysis", " "*10 + "Avg Waste:\t{}".format(self.avgWasted)))
+        self.avgWastedLabel.adjustSize()
+        self.sumWorkedLabel.setText(_translate("workHoursAnalysis", " "*10 + "Total Work:\t{}".format(self.sumWorked)))
+        self.sumWorkedLabel.adjustSize()
+        self.sumWastedLabel.setText(_translate("workHoursAnalysis", " "*10 + "Total Waste:\t{}".format(self.sumWasted)))
+        self.sumWastedLabel.adjustSize()
         self.date.setText(_translate("workHoursAnalysis", "Date"))
         self.work.setText(_translate("workHoursAnalysis", "Work Hours"))
         self.waste.setText(_translate("workHoursAnalysis", "Waste Hours"))
@@ -332,8 +365,18 @@ class Ui_workHoursAnalysis(object):
         """Update the plot with every addition or updation"""
         self.data = self.database.returnData()
         self.data.sort(key=lambda x: datetime.datetime.strptime(x[0], '%Y-%m-%d'))
+        
         self.analyse()
         self.graph.setPixmap(QtGui.QPixmap("plot.png"))
+
+        self.avgWorkedLabel.setText(" "*10 + "Avg Work:\t{}".format(self.avgWorked))
+        self.avgWorkedLabel.adjustSize()
+        self.avgWastedLabel.setText(" "*10 + "Avg Waste:\t{}".format(self.avgWasted))
+        self.avgWastedLabel.adjustSize()
+        self.sumWorkedLabel.setText(" "*10 + "Total Work:\t{}".format(self.sumWorked))
+        self.sumWorkedLabel.adjustSize()
+        self.sumWastedLabel.setText(" "*10 + "Total Waste:\t{}".format(self.sumWasted))
+        self.sumWastedLabel.adjustSize()
 
     def analyse(self):
         """Plotting the data that was extracted from the database"""
@@ -342,10 +385,18 @@ class Ui_workHoursAnalysis(object):
         else:
             data = np.array(self.data[-7 * (self.weekNos - self.weekNoCurr + 1): -7 * (self.weekNos - self.weekNoCurr)]).T
         X = np.array(data[1:3]).astype('float64')
+        self.avgWorked = np.round(np.average(X[0]), 2)
+        self.avgWasted = np.round(np.average(X[1]))
+        self.sumWorked = np.sum(X[0])
+        self.sumWasted = np.sum(X[1])
         for i,v in enumerate(data[0]):
             data[0][i] = v[5:]
 
-        plt.plot(data[0], X[0], X[1])
+        plt.plot(data[0], X[0], c='blue')
+        plt.plot(data[0], X[1], c='orange')
+        plt.plot(data[0], [self.avgWorked] * 7, '--', c='blue', label='Avg Work Hours')
+        plt.plot(data[0], [self.avgWasted] * 7, '--', c='orange', label='Avg Waste Hours')
+        plt.legend()
         plt.savefig('plot.png')
         plt.clf()
 
