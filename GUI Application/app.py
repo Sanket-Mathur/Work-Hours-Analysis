@@ -386,7 +386,7 @@ class Ui_workHoursAnalysis(object):
             data = np.array(self.data[-7 * (self.weekNos - self.weekNoCurr + 1): -7 * (self.weekNos - self.weekNoCurr)]).T
         X = np.array(data[1:3]).astype('float64')
         self.avgWorked = np.round(np.average(X[0]), 2)
-        self.avgWasted = np.round(np.average(X[1]))
+        self.avgWasted = np.round(np.average(X[1]), 2)
         self.sumWorked = np.sum(X[0])
         self.sumWasted = np.sum(X[1])
         for i,v in enumerate(data[0]):
