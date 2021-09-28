@@ -27,17 +27,21 @@ The hours put into work each day can decide the future of an individual, and hen
 ## Run Project Locally
 
 - Download the project in zip format and extract it  
-
 - Open you command line and change the location to the project folder  
-
 - Run the following command
     ```
     pip install -r requirements.txt 
     ```  
-
 - Setup the DataBase
-	```
-	python setup.py
-	```   
-
+    ```
+    python setup.py
+    ```   
 - Change the location into the CLI or GUI folder and follow the steps
+
+## Steps to Contribute
+- Fork the repository
+- Run the cloned project locally
+- Update the software locally and commit the changes
+- Push the changes from you local machine to your remote repository
+- Create a Pull Request with a description of the updations perform and/or any issues you are referencing
+- Follow up with the pull request if any comments till it is merged
