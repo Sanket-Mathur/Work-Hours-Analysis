@@ -11,6 +11,8 @@ The hours put into work each day can decide the future of an individual, and hen
 - [Interface](https://github.com/Sanket-Mathur/Work-Hours-Analysis#interface)
 - [Requirements](https://github.com/Sanket-Mathur/Work-Hours-Analysis#requirements)
 - [Run the Project Locally](https://github.com/Sanket-Mathur/Work-Hours-Analysis#run-project-locally)
+- [Working of the project](https://github.com/Sanket-Mathur/Work-Hours-Analysis#working-of-the-project)
+- [Steps to Contribute](https://github.com/Sanket-Mathur/Work-Hours-Analysis#steps-to-contribute)
 
 ## Interface
 
