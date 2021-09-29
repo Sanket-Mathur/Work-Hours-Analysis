@@ -38,6 +38,21 @@ The hours put into work each day can decide the future of an individual, and hen
     ```   
 - Change the location into the CLI or GUI folder and follow the steps
 
+## Working of the project
+- The Management class in the DataBase/db.py contains methods for managing the database and offers the functionality to:
+    - Create table
+    - Print table
+    - Insert data 
+    - Update existing data
+    - Check if row with specified date exists
+    - Return data 
+- The setup.py script make use of Create table operation of the Management class to setup a database
+- GUI consists of just one script which opens an interface in a desktop window and uses the class Methods to insert, update and visualise the data along with additional features of observing week stats and shift between existing weeks.
+- The CLI consists of two scripts responsible for inserting and analysing records respectively. 
+- DataBase management features are used from the sqlite3 module
+- All the analysis is performed using matplotlib and stored as an image to represent the plot in the GUI application.
+
+
 ## Steps to Contribute
 - Fork the repository
 - Run the cloned project locally
