@@ -29,7 +29,7 @@ class Management:
                 print(row)
         except sqlite3.Error as e:
             print(e)
-    
+
     def insertData(self, data):
         """
         Inserts the data into the database
