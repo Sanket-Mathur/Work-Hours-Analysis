@@ -239,10 +239,12 @@ class Ui_workHoursAnalysis():
         self.workEdit.setGeometry(QtCore.QRect(230, 60, 181, 41))
         self.workEdit.setAlignment(QtCore.Qt.AlignCenter)
         self.workEdit.setObjectName("workEdit")
+        self.workEdit.setRange(0, 24)
         self.wasteEdit = QtWidgets.QSpinBox(self.frame)
         self.wasteEdit.setGeometry(QtCore.QRect(430, 60, 181, 41))
         self.wasteEdit.setAlignment(QtCore.Qt.AlignCenter)
         self.wasteEdit.setObjectName("wasteEdit")
+        self.wasteEdit.setRange(0, 24)
 
         self.work = QtWidgets.QLabel(self.frame)
         self.work.setGeometry(QtCore.QRect(230, 20, 181, 31))
@@ -315,6 +317,9 @@ class Ui_workHoursAnalysis():
         dateVal = datetime.datetime(dateVal.year(), dateVal.month(), dateVal.day())
         record = self.database.checkData(str(dateVal.strftime('%Y-%m-%d')))
         if not record:
+            if int(workVal) + int(wasteVal) > 24:
+                self.show_popup_timeOutOfBound()
+                return
             self.database.insertData([str(dateVal.strftime('%Y-%m-%d')), workVal, wasteVal])
         else:
             self.show_popup_recordExist(record[0])
@@ -330,6 +335,9 @@ class Ui_workHoursAnalysis():
         dateVal = datetime.datetime(dateVal.year(), dateVal.month(), dateVal.day())
         record = self.database.checkData(str(dateVal.strftime('%Y-%m-%d')))
         if record:
+            if int(workVal) + int(wasteVal) > 24:
+                self.show_popup_timeOutOfBound()
+                return
             self.database.updateData([str(dateVal.strftime('%Y-%m-%d')), workVal, wasteVal])
         else:
             self.show_popup_recordDoesntExist()
@@ -419,6 +427,16 @@ class Ui_workHoursAnalysis():
         msg.setText('The record does not exists.')
         msg.setIcon(QMessageBox.Warning)
         msg.setInformativeText('Use the ADD button to add the record.')
+
+        x = msg.exec_()
+
+    @staticmethod
+    def show_popup_timeOutOfBound():
+        msg = QMessageBox()
+        msg.setWindowTitle('Error')
+        msg.setText('Time out of bounds.')
+        msg.setIcon(QMessageBox.Warning)
+        msg.setInformativeText('The sum of working and waste hours exceed 24 hours. Please provide valid values.')
 
         x = msg.exec_()
 
