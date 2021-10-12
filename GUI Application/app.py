@@ -8,7 +8,7 @@ import sys
 sys.path.append('../DataBase/')
 from db import Management
 
-class Ui_workHoursAnalysis(object):
+class Ui_workHoursAnalysis():
 
     def __init__(self):
         self.database = Management()
@@ -400,7 +400,8 @@ class Ui_workHoursAnalysis(object):
         plt.savefig('plot.png')
         plt.clf()
 
-    def show_popup_recordExist(self, details):
+    @staticmethod
+    def show_popup_recordExist(details):
         msg = QMessageBox()
         msg.setWindowTitle('Error')
         msg.setText('The record already exists.')
@@ -411,7 +412,8 @@ class Ui_workHoursAnalysis(object):
 
         x = msg.exec_()
 
-    def show_popup_recordDoesntExist(self):
+    @staticmethod
+    def show_popup_recordDoesntExist():
         msg = QMessageBox()
         msg.setWindowTitle('Error')
         msg.setText('The record does not exists.')
