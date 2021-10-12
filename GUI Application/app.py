@@ -422,7 +422,6 @@ class Ui_workHoursAnalysis(object):
 
 
 if __name__ == "__main__":
-    import sys
     app = QtWidgets.QApplication(sys.argv)
     workHoursAnalysis = QtWidgets.QMainWindow()
     ui = Ui_workHoursAnalysis()
