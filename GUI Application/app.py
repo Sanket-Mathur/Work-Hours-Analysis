@@ -410,7 +410,8 @@ class Ui_workHoursAnalysis(object):
         msg.setDetailedText('The existing values are\nWork Hours:\t{}\nWasted Hours:\t{}\nUse the UPDATE button if you want to update the record.\nDate: {}'.format(details[1], details[2], details[0]))
 
         x = msg.exec_()
-
+    
+    @staticmethod
     def show_popup_recordDoesntExist(self):
         msg = QMessageBox()
         msg.setWindowTitle('Error')
