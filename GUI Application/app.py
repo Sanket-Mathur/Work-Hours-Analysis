@@ -8,7 +8,7 @@ import sys
 sys.path.append('../DataBase/')
 from db import Management
 
-class Ui_workHoursAnalysis(object):
+class Ui_workHoursAnalysis():
 
     def __init__(self):
         self.database = Management()
