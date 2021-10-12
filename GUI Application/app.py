@@ -18,7 +18,7 @@ class Ui_workHoursAnalysis():
         self.weekNoCurr = self.weekNos
         self.analyse()
 
-    def setupUi(self, workHoursAnalysis):
+    def setupUi(self):
         workHoursAnalysis.setObjectName("workHoursAnalysis")
         workHoursAnalysis.resize(800, 603)
 
@@ -273,7 +273,7 @@ class Ui_workHoursAnalysis():
         self.menubar.setObjectName("menubar")
         workHoursAnalysis.setMenuBar(self.menubar)
 
-        self.retranslateUi(workHoursAnalysis)
+        self.retranslateUi()
         QtCore.QMetaObject.connectSlotsByName(workHoursAnalysis)
 
         self.addButton.clicked.connect(lambda: self.add_clicked(self.dateEdit.date(), self.workEdit.value(), self.wasteEdit.value()))
@@ -286,7 +286,7 @@ class Ui_workHoursAnalysis():
         if self.weekNoCurr == self.weekNos:
             self.nextWeek.setEnabled(False)
 
-    def retranslateUi(self, workHoursAnalysis):
+    def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
         workHoursAnalysis.setWindowTitle(_translate("workHoursAnalysis", "Work Hour Analysis"))
         
@@ -427,6 +427,6 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     workHoursAnalysis = QtWidgets.QMainWindow()
     ui = Ui_workHoursAnalysis()
-    ui.setupUi(workHoursAnalysis)
+    ui.setupUi()
     workHoursAnalysis.show()
     sys.exit(app.exec_())
