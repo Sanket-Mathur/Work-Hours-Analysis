@@ -13,7 +13,7 @@ def transform_date_format(date):
     ---------
     date : str
         It should be in format `yyyy-mm-dd`
-    
+
     Return
     ------
     new_date : str

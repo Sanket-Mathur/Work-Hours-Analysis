@@ -21,7 +21,7 @@ class Management:
             self.db.commit()
         except sqlite3.Error as e:
             print(e)
-    
+
     def printTable(self):
         """"Prints all the rows that exist in the table"""
         try:
@@ -33,12 +33,12 @@ class Management:
     def insertData(self, data):
         """
         Inserts the data into the database
-        
+
         Parameter
         ---------
         data : list
             Contains `date`, `work hours` and `waste hours` in single list.
-        
+
         Example
         -------
         >>> database.insertData(['2021-10-01', 0, 0])
@@ -48,7 +48,7 @@ class Management:
             self.db.commit()
         except sqlite3.Error as e:
             print(e)
-    
+
     def returnData(self):
         """
         Returns the data from the database
@@ -70,11 +70,11 @@ class Management:
             return data
         except sqlite3.Error as e:
             print(e)
-    
+
     def checkData(self, key):
         """
         Returns record if it exists else None
-        
+
         Parameter
         ----------
         key : str
@@ -98,16 +98,16 @@ class Management:
             return row.fetchall()
         except sqlite3.Error as e:
             print(e)
-    
+
     def updateData(self, data):
         """
         Update a single record on basis of DATE
-        
+
         Parameter
         ---------
         data : list
             Contains `date`, `work hours` and `waste hours` in single list.
-        
+
         Example
         -------
         >>> database.updateData(['2021-10-01', 0, 0])
