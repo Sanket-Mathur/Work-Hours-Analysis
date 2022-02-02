@@ -291,7 +291,7 @@ class Ui_workHoursAnalysis():
     def retranslateUi(self, workHoursAnalysis):
         _translate = QtCore.QCoreApplication.translate
         workHoursAnalysis.setWindowTitle(_translate("workHoursAnalysis", "Work Hour Analysis"))
-        
+
         d1 = self.data[-7][0]
         d1 = d1[8:10] + '/' + d1[5:7] + '/' + d1[0:4]
         d2 = self.data[-1][0]
@@ -330,7 +330,7 @@ class Ui_workHoursAnalysis():
             self.nextWeek.setEnabled(False)
         if self.weekNoCurr > 1:
             self.preWeek.setEnabled(True)
-    
+
     def update_clicked(self, dateVal, workVal, wasteVal):
         dateVal = datetime.datetime(dateVal.year(), dateVal.month(), dateVal.day())
         record = self.database.checkData(str(dateVal.strftime('%Y-%m-%d')))
@@ -342,7 +342,7 @@ class Ui_workHoursAnalysis():
         else:
             self.show_popup_recordDoesntExist()
         self.update()
-    
+
     def pre_clicked(self):
         """Plot of previous week"""
         self.weekNoCurr -= 1
@@ -355,7 +355,7 @@ class Ui_workHoursAnalysis():
         if self.weekNoCurr < self.weekNos:
             self.nextWeek.setEnabled(True)
         self.update()
-    
+
     def next_clicked(self):
         """Plot of previous week"""
         self.weekNoCurr += 1
@@ -373,7 +373,7 @@ class Ui_workHoursAnalysis():
         """Update the plot with every addition or updation"""
         self.data = self.database.returnData()
         self.data.sort(key=lambda x: datetime.datetime.strptime(x[0], '%Y-%m-%d'))
-        
+
         self.analyse()
         self.graph.setPixmap(QtGui.QPixmap("plot.png"))
 
